@@ -1,17 +1,17 @@
+# src/core/models.py
 from __future__ import annotations
 
 from datetime import datetime
 from typing import Any
 
-from pydantic import BaseModel, Field, computed_field
+from pydantic import BaseModel, Field
 
 
 class CommAddr(BaseModel):
-    dev_addr: int = Field(ge=0, le=31)
-    msg_id: int = Field(ge=0, le=511)
-    reserved: int = Field(ge=0, le=1)
+    dev_addr: int = Field(ge=0, le=31)      # 5 бит (0-31)
+    msg_id: int = Field(ge=0, le=1023)     # 10 бит (0-1023) ← ИСПРАВЛЕНО с 511
+    reserved: int = Field(ge=0, le=1)       # 1 бит
 
-    @computed_field
     @property
     def is_broadcast(self) -> bool:
         return self.dev_addr == 0

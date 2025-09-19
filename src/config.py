@@ -1,21 +1,9 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Literal
 
 from pydantic import Field
 from pydantic_settings import BaseSettings
-
-
-class RedisConfig(BaseSettings):
-    host: str = "localhost"
-    port: int = 6379
-    db: int = 0
-    username: str | None = None
-    password: str | None = None
-    input_channel: str = "dbc:input"
-    output_channel: str = "dbc:output"
-    pool_size: int = 10
 
 
 class GRPCConfig(BaseSettings):
@@ -47,9 +35,7 @@ class MetricsConfig(BaseSettings):
 
 class Settings(BaseSettings):
     dbc_file: Path = Field(default=Path("./dbc/charging_station.dbc"))
-    output_type: Literal["redis", "grpc"] = "redis"
-
-    redis: RedisConfig = Field(default_factory=RedisConfig)
+    
     grpc: GRPCConfig = Field(default_factory=GRPCConfig)
     processing: ProcessingConfig = Field(default_factory=ProcessingConfig)
     logging: LoggingConfig = Field(default_factory=LoggingConfig)

@@ -17,7 +17,6 @@ classifiers = [
 python = "^3.11"
 pydantic = "^2.5"
 pydantic-settings = "^2.1"
-redis = {extras = ["hiredis"], version = "^5.0"}
 grpcio = "^1.60"
 grpcio-tools = "^1.60"
 cantools = "^39.0"
@@ -34,6 +33,7 @@ black = "^23.12"
 ruff = "^0.1"
 mypy = "^1.8"
 pre-commit = "^3.6"
+types-grpcio = "*"
 
 [tool.poetry.scripts]
 dbc-service = "src.main:main"
@@ -59,4 +59,5 @@ warn_return_any = true
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 testpaths = ["tests"]
+pythonpath = ["src"]
 addopts = "--cov=src --cov-report=html"
