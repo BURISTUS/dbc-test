@@ -11,6 +11,7 @@ from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from typing import List, Dict, Any
+import numpy as np
 
 # Добавляем src в путь
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
@@ -104,8 +105,8 @@ BO_ 300 HighFreqMessage: 8 Vector__XXX
             duration=duration,
             messages_per_second=num_operations / duration,
             avg_latency_ms=statistics.mean(latencies),
-            p95_latency_ms=statistics.quantile(latencies, 0.95),
-            p99_latency_ms=statistics.quantile(latencies, 0.99),
+            p95_latency_ms=float(np.percentile(latencies, 95)) if latencies else 0.0,
+            p99_latency_ms=float(np.percentile(latencies, 99)) if latencies else 0.0,
             errors=errors,
             memory_usage_mb=0  # Minimal memory for CRC
         )
@@ -149,8 +150,8 @@ BO_ 300 HighFreqMessage: 8 Vector__XXX
             duration=duration,
             messages_per_second=num_frames / duration,
             avg_latency_ms=statistics.mean(latencies),
-            p95_latency_ms=statistics.quantile(latencies, 0.95),
-            p99_latency_ms=statistics.quantile(latencies, 0.99),
+            p95_latency_ms=float(np.percentile(latencies, 95)) if latencies else 0.0,
+            p99_latency_ms=float(np.percentile(latencies, 99)) if latencies else 0.0,
             errors=errors,
             memory_usage_mb=self.get_memory_usage()
         )
@@ -208,8 +209,8 @@ BO_ 300 HighFreqMessage: 8 Vector__XXX
             duration=duration,
             messages_per_second=num_messages / duration,
             avg_latency_ms=statistics.mean(latencies),
-            p95_latency_ms=statistics.quantile(latencies, 0.95),
-            p99_latency_ms=statistics.quantile(latencies, 0.99),
+            p95_latency_ms=float(np.percentile(latencies, 95)) if latencies else 0.0,
+            p99_latency_ms=float(np.percentile(latencies, 99)) if latencies else 0.0,
             errors=errors,
             memory_usage_mb=self.get_memory_usage()
         )
@@ -266,8 +267,8 @@ BO_ 300 HighFreqMessage: 8 Vector__XXX
             duration=duration,
             messages_per_second=num_messages / duration,
             avg_latency_ms=statistics.mean(latencies),
-            p95_latency_ms=statistics.quantile(latencies, 0.95),
-            p99_latency_ms=statistics.quantile(latencies, 0.99),
+            p95_latency_ms=float(np.percentile(latencies, 95)) if latencies else 0.0,
+            p99_latency_ms=float(np.percentile(latencies, 99)) if latencies else 0.0,
             errors=errors,
             memory_usage_mb=self.get_memory_usage()
         )
@@ -317,8 +318,8 @@ BO_ 300 HighFreqMessage: 8 Vector__XXX
             duration=duration,
             messages_per_second=num_frames / duration,
             avg_latency_ms=statistics.mean(latencies),
-            p95_latency_ms=statistics.quantile(latencies, 0.95),
-            p99_latency_ms=statistics.quantile(latencies, 0.99),
+            p95_latency_ms=float(np.percentile(latencies, 95)) if latencies else 0.0,
+            p99_latency_ms=float(np.percentile(latencies, 99)) if latencies else 0.0,
             errors=service.stats["errors"],
             memory_usage_mb=self.get_memory_usage()
         )

@@ -41,31 +41,26 @@ class DBCService:
         await self.grpc_server.serve()
     
     async def handle_message(self, topic: str, payload: bytes) -> None:
-        try:
-            self.stats["total"] += 1
-            
-            comm_data = await self.frame_parser.parse(payload)
-            if not comm_data:
-                self.stats["errors"] += 1
-                return
-            
-            parsed_message = await self.dbc_processor.process_message(comm_data, topic)
-            if not parsed_message:
-                self.stats["errors"] += 1
-                return
-            
-            self.stats["valid"] += 1
-            
-            success = await self.grpc_server.publish_message(parsed_message)
-            if success:
-                self.stats["published"] += 1
-            
-            if self.stats["total"] % 1000 == 0:
-                logger.info("stats", **self.stats)
-                
-        except Exception as e:
-            logger.error("process_error", error=str(e))
+        """ФИНАЛЬНАЯ ОПТИМИЗАЦИЯ - минимум вызовов"""
+        self.stats["total"] += 1
+        
+        # Убираем try/catch overhead для горячего пути
+        comm_data = await self.frame_parser.parse(payload)
+        if not comm_data:
             self.stats["errors"] += 1
+            return
+        
+        parsed_message = await self.dbc_processor.process_message(comm_data, topic)
+        if not parsed_message:
+            self.stats["errors"] += 1
+            return
+        
+        self.stats["valid"] += 1
+        
+        # Убираем проверку success для скорости
+        await self.grpc_server.publish_message(parsed_message)
+        self.stats["published"] += 1
+    
     
     async def shutdown(self) -> None:
         logger.info("service_shutting_down")

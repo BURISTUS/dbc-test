@@ -24,6 +24,7 @@ orjson = "^3.9"
 structlog = "^23.2"
 uvloop = "^0.19"
 prometheus-client = "^0.19"
+numpy = "^2.3.3"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.4"
